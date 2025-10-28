@@ -244,8 +244,10 @@ export default function Index() {
             <Card className="bg-card border-border hover:border-primary/50 transition-all hover:glow-blue cursor-pointer group">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#0088cc] p-3 rounded-lg">
-                    <Icon name="Send" className="h-8 w-8 text-white" />
+                  <div className="bg-[#0088cc] p-3 rounded-lg flex items-center justify-center w-14 h-14">
+                    <svg viewBox="0 0 240 240" className="h-8 w-8 fill-white">
+                      <path d="M94.5,127.5l29.5-28.5l-75.5-42l-13,11L94.5,127.5z M153,68l46.5,26.5l13-11l-62.5-35L153,68z M107.5,137.5l-16,20 l1.5,48.5l34.5-20l-20-48.5V137.5z M153,182.5l52.5,30l17.5-77.5l-49-28L153,182.5z M209.5,32L120,81.5l33.5,19l56-28.5L209.5,32z M40.5,76.5L26,172l56.5-33l14-20.5L40.5,76.5z"/>
+                    </svg>
                   </div>
                   <CardTitle className="text-2xl text-foreground">Telegram</CardTitle>
                 </div>
@@ -267,8 +269,10 @@ export default function Index() {
             <Card className="bg-card border-border hover:border-primary/50 transition-all hover:glow-blue cursor-pointer group">
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="bg-gradient-to-br from-[#1b2838] to-[#2a475e] p-3 rounded-lg">
-                    <Icon name="Gamepad2" className="h-8 w-8 text-white" />
+                  <div className="bg-gradient-to-br from-[#1b2838] to-[#2a475e] p-3 rounded-lg flex items-center justify-center w-14 h-14">
+                    <svg viewBox="0 0 256 256" className="h-8 w-8 fill-white">
+                      <path d="M127.374,5.355c-64.404,0-117.167,49.661-122.18,112.77l65.712,27.171c5.567-3.787,12.293-5.993,19.555-5.993 c0.301,0,0.603,0.004,0.903,0.012l29.228-42.329c0-0.015,0-0.027,0-0.042c0-27.922,22.742-50.666,50.665-50.666 c27.925,0,50.667,22.744,50.667,50.666c0,27.923-22.742,50.665-50.667,50.665c-0.375,0-0.747-0.006-1.119-0.016l-41.446,29.601 c0.009,0.314,0.015,0.628,0.015,0.943c0,19.555-15.874,35.427-35.427,35.427c-17.231,0-31.639-12.31-34.756-28.618 l-46.962-19.408c11.441,45.896,52.653,79.939,101.749,79.939c57.883,0,104.875-46.998,104.875-104.88 C232.186,52.353,185.188,5.355,127.374,5.355z M80.392,187.687l-15.062-6.219c2.676,5.578,7.296,10.189,13.484,12.659 c13.377,5.527,28.755-0.854,34.283-14.234c2.676-6.478,2.677-13.529,0-19.995c-2.679-6.477-7.79-11.548-14.269-14.225 c-6.429-2.653-13.291-2.596-19.343-0.293l15.563,6.432c9.859,4.073,14.56,15.445,10.488,25.305 C101.461,187.976,90.251,191.762,80.392,187.687z M186.422,96.929c0-18.615-15.106-33.72-33.72-33.72 c-18.616,0-33.721,15.104-33.721,33.72c0,18.614,15.105,33.72,33.721,33.72C171.316,130.649,186.422,115.543,186.422,96.929z M127.695,105.642c-4.806,0-8.711-3.896-8.711-8.713c0-4.807,3.904-8.712,8.711-8.712c4.814,0,8.712,3.904,8.712,8.712 C136.407,101.747,132.509,105.642,127.695,105.642z M161.376,88.206c0-12.421-10.075-22.495-22.494-22.495 c-12.422,0-22.495,10.074-22.495,22.495c0,12.422,10.073,22.496,22.495,22.496C151.301,110.702,161.376,100.628,161.376,88.206z"/>
+                    </svg>
                   </div>
                   <CardTitle className="text-2xl text-foreground">Steam</CardTitle>
                 </div>
