@@ -42,9 +42,14 @@ export default function Index() {
     const savedToken = localStorage.getItem('tickpay_token');
     if (savedUser && savedToken) {
       setUser(JSON.parse(savedUser));
-      fetchBalance();
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      fetchBalance();
+    }
+  }, [user]);
 
   const fetchBalance = async () => {
     const token = localStorage.getItem('tickpay_token');
@@ -193,9 +198,13 @@ export default function Index() {
                     <Icon name="ShoppingBag" className="mr-2 h-4 w-4" />
                     Покупки
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-secondary">
+                  <DropdownMenuItem 
+                    onClick={() => window.open('https://t.me/BNESkvi', '_blank')}
+                    className="cursor-pointer text-foreground hover:bg-secondary"
+                  >
                     <Icon name="Headphones" className="mr-2 h-4 w-4" />
                     Поддержка
+                    <span className="ml-auto text-xs text-muted-foreground">@BNESkvi</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-border" />
                   <DropdownMenuItem 
@@ -231,25 +240,52 @@ export default function Index() {
             Маркетплейс цифровых товаров и услуг
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <Card key={item} className="bg-card border-border hover:border-primary/50 transition-all hover:glow-blue cursor-pointer">
-                <CardHeader>
-                  <CardTitle className="text-foreground">Товар #{item}</CardTitle>
-                  <CardDescription className="text-muted-foreground">
-                    Описание товара
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl font-bold text-primary">₽999</span>
-                    <Button size="sm" className="bg-primary hover:bg-primary/90">
-                      Купить
-                    </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="bg-card border-border hover:border-primary/50 transition-all hover:glow-blue cursor-pointer group">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="bg-[#0088cc] p-3 rounded-lg">
+                    <Icon name="Send" className="h-8 w-8 text-white" />
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                  <CardTitle className="text-2xl text-foreground">Telegram</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {['Звёзды', 'Аккаунты', 'Премиум'].map((item) => (
+                    <button
+                      key={item}
+                      className="px-4 py-2 bg-secondary hover:bg-primary/20 text-foreground text-sm rounded-md transition-colors border border-border hover:border-primary"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-card border-border hover:border-primary/50 transition-all hover:glow-blue cursor-pointer group">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="bg-gradient-to-br from-[#1b2838] to-[#2a475e] p-3 rounded-lg">
+                    <Icon name="Gamepad2" className="h-8 w-8 text-white" />
+                  </div>
+                  <CardTitle className="text-2xl text-foreground">Steam</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  {['Пополнение Steam', 'Аккаунты', 'Подарочные карты'].map((item) => (
+                    <button
+                      key={item}
+                      className="px-4 py-2 bg-secondary hover:bg-primary/20 text-foreground text-sm rounded-md transition-colors border border-border hover:border-primary"
+                    >
+                      {item}
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </main>
