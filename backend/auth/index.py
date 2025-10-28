@@ -71,14 +71,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 password_hash = hash_password(password)
                 
+                session_token = generate_session_token()
+                
                 cursor.execute(
-                    "INSERT INTO users (username, email, password_hash, avatar_id) VALUES (%s, %s, %s, %s) RETURNING id, username, email, avatar_id, created_at",
-                    (username, email, password_hash, avatar_id)
+                    "INSERT INTO users (username, email, password_hash, avatar_id, session_token) VALUES (%s, %s, %s, %s, %s) RETURNING id, username, email, avatar_id, created_at",
+                    (username, email, password_hash, avatar_id, session_token)
                 )
                 user = cursor.fetchone()
                 conn.commit()
-                
-                session_token = generate_session_token()
                 
                 return {
                     'statusCode': 200,
@@ -119,6 +119,12 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                     }
                 
                 session_token = generate_session_token()
+                
+                cursor.execute(
+                    "UPDATE users SET session_token = %s WHERE id = %s",
+                    (session_token, user['id'])
+                )
+                conn.commit()
                 
                 return {
                     'statusCode': 200,

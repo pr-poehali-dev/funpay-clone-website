@@ -21,6 +21,7 @@ interface User {
   username: string;
   email: string;
   avatar_id: number;
+  balance?: number;
 }
 
 export default function Index() {
@@ -32,14 +33,85 @@ export default function Index() {
   const [username, setUsername] = useState('');
   const [selectedAvatar, setSelectedAvatar] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [balance, setBalance] = useState(0);
+  const [showBalanceDialog, setShowBalanceDialog] = useState(false);
+  const [depositAmount, setDepositAmount] = useState('');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('tickpay_user');
     const savedToken = localStorage.getItem('tickpay_token');
     if (savedUser && savedToken) {
       setUser(JSON.parse(savedUser));
+      fetchBalance();
     }
   }, []);
+
+  const fetchBalance = async () => {
+    const token = localStorage.getItem('tickpay_token');
+    const savedUser = localStorage.getItem('tickpay_user');
+    if (!token || !savedUser) return;
+
+    const user = JSON.parse(savedUser);
+    try {
+      const response = await fetch('https://functions.poehali.dev/8329b011-9af6-4665-9eb1-dbfdd09029df', {
+        method: 'GET',
+        headers: {
+          'X-User-Token': token,
+          'X-User-Id': user.id.toString()
+        }
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setBalance(data.balance);
+      }
+    } catch (error) {
+      console.error('Error fetching balance:', error);
+    }
+  };
+
+  const handleDeposit = async () => {
+    const amount = parseFloat(depositAmount);
+    if (isNaN(amount) || amount <= 0) {
+      toast.error('Введите корректную сумму');
+      return;
+    }
+
+    const token = localStorage.getItem('tickpay_token');
+    const savedUser = localStorage.getItem('tickpay_user');
+    if (!token || !savedUser) return;
+
+    const user = JSON.parse(savedUser);
+    setLoading(true);
+
+    try {
+      const response = await fetch('https://functions.poehali.dev/8329b011-9af6-4665-9eb1-dbfdd09029df', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-User-Token': token,
+          'X-User-Id': user.id.toString()
+        },
+        body: JSON.stringify({ amount })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error || 'Ошибка пополнения');
+        return;
+      }
+
+      setBalance(data.balance);
+      setShowBalanceDialog(false);
+      setDepositAmount('');
+      toast.success(`Баланс пополнен на ₽${amount}`);
+    } catch (error) {
+      toast.error('Ошибка подключения к серверу');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleAuth = async () => {
     setLoading(true);
@@ -106,9 +178,16 @@ export default function Index() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-card border-border">
-                  <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-secondary">
+                  <div className="px-2 py-3 border-b border-border">
+                    <p className="text-sm text-muted-foreground">Баланс</p>
+                    <p className="text-xl font-bold text-primary">₽{balance.toFixed(2)}</p>
+                  </div>
+                  <DropdownMenuItem 
+                    onClick={() => setShowBalanceDialog(true)}
+                    className="cursor-pointer text-foreground hover:bg-secondary"
+                  >
                     <Icon name="Wallet" className="mr-2 h-4 w-4" />
-                    Финансы
+                    Пополнить баланс
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer text-foreground hover:bg-secondary">
                     <Icon name="ShoppingBag" className="mr-2 h-4 w-4" />
@@ -295,6 +374,58 @@ export default function Index() {
               </Button>
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showBalanceDialog} onOpenChange={setShowBalanceDialog}>
+        <DialogContent className="bg-card border-border sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white text-glow-blue">
+              Пополнение баланса
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4">
+            <div className="p-4 bg-secondary rounded-lg">
+              <p className="text-sm text-muted-foreground mb-1">Текущий баланс</p>
+              <p className="text-3xl font-bold text-primary">₽{balance.toFixed(2)}</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="deposit-amount" className="text-foreground">Сумма пополнения</Label>
+              <Input
+                id="deposit-amount"
+                type="number"
+                placeholder="1000"
+                value={depositAmount}
+                onChange={(e) => setDepositAmount(e.target.value)}
+                className="bg-input border-border text-foreground"
+                min="1"
+                step="0.01"
+              />
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              {[100, 500, 1000].map((amount) => (
+                <Button
+                  key={amount}
+                  variant="outline"
+                  onClick={() => setDepositAmount(amount.toString())}
+                  className="border-border hover:border-primary hover:bg-primary/10"
+                >
+                  ₽{amount}
+                </Button>
+              ))}
+            </div>
+
+            <Button 
+              onClick={handleDeposit} 
+              className="w-full bg-primary hover:bg-primary/90 glow-blue-strong"
+              disabled={loading}
+            >
+              {loading ? 'Пополнение...' : 'Пополнить'}
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

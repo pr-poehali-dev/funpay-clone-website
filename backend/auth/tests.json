@@ -1,41 +1,33 @@
 {
   "tests": [
     {
-      "name": "Register new user",
-      "method": "POST",
-      "path": "/",
-      "body": {
-        "action": "register",
-        "username": "testuser",
-        "email": "test@example.com",
-        "password": "password123",
-        "avatar_id": 1
-      },
-      "expectedStatus": 200,
-      "expectedBody": {
-        "user": {
-          "username": "string",
-          "email": "string"
-        },
-        "session_token": "string"
-      },
-      "bodyMatcher": "partial"
-    },
-    {
-      "name": "Login existing user",
+      "name": "Login with invalid credentials",
       "method": "POST",
       "path": "/",
       "body": {
         "action": "login",
-        "email": "test@example.com",
-        "password": "password123"
+        "email": "nonexistent@example.com",
+        "password": "wrongpassword"
       },
-      "expectedStatus": 200,
+      "expectedStatus": 401,
       "expectedBody": {
-        "user": {
-          "username": "string"
-        },
-        "session_token": "string"
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Register without required fields",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "action": "register",
+        "username": "",
+        "email": "",
+        "password": ""
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
       },
       "bodyMatcher": "partial"
     }

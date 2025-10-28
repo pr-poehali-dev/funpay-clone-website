@@ -1,0 +1,27 @@
+{
+  "tests": [
+    {
+      "name": "Get balance - unauthorized",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "Unauthorized"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Deposit funds - unauthorized",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "amount": 100
+      },
+      "expectedStatus": 401,
+      "expectedBody": {
+        "error": "Unauthorized"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
